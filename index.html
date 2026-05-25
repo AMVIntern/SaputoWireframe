@@ -1783,6 +1783,20 @@
     </button>
   </aside>
 
+  <!-- Exit confirmation modal — outside all views so it's never hidden -->
+  <div class="modal-overlay hidden" id="exitModal">
+    <div class="modal-box" style="min-width:320px; max-width:380px;">
+      <div class="modal-header">
+        <span class="modal-title">Exit</span>
+      </div>
+      <p style="color:#c0d0de; font-size:0.95rem; line-height:1.5;">Are you sure you want to exit?</p>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button class="modal-btn" id="exitCancelBtn" type="button">Cancel</button>
+        <button class="modal-btn confirm" id="exitOkBtn" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const frames = {
       top: [1, 2],
@@ -2344,9 +2358,19 @@
     document.querySelector(".arrow-btn.left").addEventListener("click",  () => navigateFrame(-1));
     document.querySelector(".arrow-btn.right").addEventListener("click", () => navigateFrame(1));
 
+    const exitModal      = document.getElementById("exitModal");
+    const exitCancelBtn  = document.getElementById("exitCancelBtn");
+    const exitOkBtn      = document.getElementById("exitOkBtn");
+    const exitNavBtn     = document.querySelector(".nav-btn[title='Exit']");
+
+    exitNavBtn.addEventListener("click", () => exitModal.classList.remove("hidden"));
+    exitCancelBtn.addEventListener("click", () => exitModal.classList.add("hidden"));
+    exitOkBtn.addEventListener("click",     () => exitModal.classList.add("hidden"));
+
     updateViewer();
     renderGroups();
     renderHistory();
   </script>
+
 </body>
 </html>
