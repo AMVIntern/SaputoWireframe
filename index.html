@@ -1,0 +1,2131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saputo Inspection System Header</title>
+  <style>
+    :root {
+      --bg: #0B1D2A;
+      --accent: #00D1B2;
+      --text: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      height: 78px;
+      padding: 6px;
+      margin: 6px 0 0 6px;
+      gap: 10px;
+    }
+
+    .panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      height: 100%;
+      background: transparent;
+    }
+
+    .panel-left {
+      width: 168px;
+    }
+
+    .panel-center {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .panel-right {
+      width: 168px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      white-space: nowrap;
+      text-transform: none;
+    }
+
+    .logo-left {
+      display: block;
+      width: 116px;
+      height: 56px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .logo-right {
+      display: block;
+      width: 94px;
+      height: 40px;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .inspection-layout {
+      width: 100%;
+      height: calc(100vh - 98px);
+      padding: 8px 98px 8px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .main-content {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .view.active {
+      display: flex;
+    }
+
+    .info-bar {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 10px;
+    }
+
+    .info-item {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      letter-spacing: 0.03em;
+      font-weight: 600;
+      text-align: center;
+      padding: 8px 10px;
+    }
+
+    .status-pass {
+      color: #16d46b;
+      font-weight: 700;
+    }
+
+    .viewer {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #0c1a2a;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .viewer-frame {
+      width: calc(100% - 80px);
+      height: calc(100% - 84px);
+      border: 1px solid #1f2f40;
+      border-radius: 4px;
+      background: #111e2c;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #c6d0de;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+
+    .arrow-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #122132;
+      color: var(--text);
+      font-size: 1.8rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .arrow-btn.left {
+      left: 14px;
+    }
+
+    .arrow-btn.right {
+      right: 14px;
+    }
+
+    .region-toggle {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.83rem;
+      letter-spacing: 0.04em;
+    }
+
+    .toggle-pill {
+      width: 50px;
+      height: 24px;
+      border: 1px solid var(--accent);
+      border-radius: 999px;
+      background: #10253a;
+      position: relative;
+    }
+
+    .toggle-pill::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: right 0.2s, left 0.2s, background 0.2s;
+    }
+
+    .toggle-pill.off {
+      border-color: #2b4a60;
+    }
+
+    .toggle-pill.off::after {
+      right: auto;
+      left: 2px;
+      background: #4a6a80;
+    }
+
+    .region-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .right-panel {
+      width: 300px;
+      height: 100%;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .panel-heartbeat {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 10px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #0b1825;
+      font-size: 0.88rem;
+      font-weight: 700;
+      flex-shrink: 0;
+      letter-spacing: 0.04em;
+    }
+
+    .panel-toggles {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 10px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #0b1825;
+    }
+
+    .panel-toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .panel-info-divider {
+      height: 1px;
+      background: #1a3040;
+      flex-shrink: 0;
+    }
+
+    .panel-info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .panel-info-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .panel-info-label {
+      font-size: 0.68rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .panel-info-value {
+      font-size: 0.8rem;
+      color: #c0d0de;
+      font-weight: 600;
+    }
+
+    .panel-info-path {
+      font-size: 0.74rem;
+      color: #6a8fa8;
+      word-break: break-all;
+      white-space: normal;
+    }
+
+    .panel-hb-row {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 8px;
+      border-top: 1px solid #1a3040;
+      flex-shrink: 0;
+    }
+
+    .panel-hb-label {
+      font-size: 0.72rem;
+      color: #7a96a8;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .panel-hb-value {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .frame-groups {
+      flex-shrink: 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-content: start;
+      gap: 8px;
+    }
+
+    .group {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      padding: 7px;
+      background: #0e1f2f;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 0;
+    }
+
+    .group h3 {
+      text-align: center;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      margin-bottom: 2px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #1a3040;
+    }
+
+    .frame-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .frame-item {
+      width: 100%;
+      border: 1px solid #1e3d4a;
+      border-radius: 3px;
+      background: #102335;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 7px;
+      font-size: 0.78rem;
+      cursor: pointer;
+      letter-spacing: 0.02em;
+    }
+
+    .frame-item.selected {
+      border: 2px solid var(--accent);
+    }
+
+    .indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      flex: 0 0 auto;
+    }
+
+    .indicator.ok {
+      background: #16d46b;
+    }
+
+    .indicator.defect {
+      background: #f04444;
+    }
+
+    .side-nav {
+      position: fixed;
+      top: 92px;
+      right: 6px;
+      width: 84px;
+      height: calc(100vh - 98px);
+      padding: 12px 8px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: #0c1730;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+    }
+
+    .nav-btn {
+      width: 64px;
+      height: 96px;
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      background: #101a33;
+      color: #d9dde6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      line-height: 1.15;
+      letter-spacing: 0.03em;
+      text-align: center;
+      gap: 8px;
+      padding: 6px 4px;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .nav-btn.back {
+      height: 66px;
+      border-color: #2b3f60;
+      color: #e6e9ef;
+      font-size: 42px;
+    }
+
+    .nav-icon {
+      font-size: 45px;
+      line-height: 1;
+    }
+
+    .nav-label {
+      font-size: 11px;
+      line-height: 1.1;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .nav-btn.active {
+      border-color: #16d46b;
+      color: #ffffff;
+    }
+
+    .side-nav {
+      transition: width 0.2s, padding 0.2s;
+    }
+
+    .side-nav.collapsed {
+      width: 36px;
+      padding: 12px 4px;
+    }
+
+    .side-nav.collapsed .nav-btn:not(.collapse-btn) {
+      display: none;
+    }
+
+    .side-nav.collapsed .collapse-btn {
+      width: 28px;
+      height: 52px;
+      font-size: 1.4rem;
+    }
+
+    body.nav-collapsed .inspection-layout,
+    body.nav-collapsed .history-layout,
+    body.nav-collapsed .settings-layout {
+      padding-right: 50px;
+    }
+
+    .history-layout {
+      width: 100%;
+      min-height: calc(100vh - 92px);
+      padding: 10px 98px 14px 8px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .history-toolbar {
+      display: grid;
+      grid-template-columns: 58px 1fr 250px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .history-back-btn,
+    .date-box,
+    .date-nav {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #102335;
+      color: var(--text);
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .history-back-btn {
+      cursor: pointer;
+      font-size: 1.8rem;
+      line-height: 1;
+      transition: background 0.15s, border-color 0.15s;
+      padding: 0;
+    }
+
+    .history-back-btn:hover {
+      background: #1a3a52;
+      border-color: #ffffff;
+    }
+
+    .export-csv-btn {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #0d3d2e;
+      color: var(--accent);
+      height: 36px;
+      padding: 0 14px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s;
+      align-self: flex-end;
+    }
+
+    .export-csv-btn:hover {
+      background: #134d3a;
+    }
+
+    /* Export modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+
+    .modal-overlay.hidden {
+      display: none;
+    }
+
+    .modal-box {
+      background: #0c1a2a;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 28px 32px;
+      min-width: 380px;
+      max-width: 480px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.04em;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      color: #a0b4c4;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .modal-close:hover {
+      color: #ffffff;
+    }
+
+    .modal-section-label {
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .export-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .export-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border: 1px solid #1e3d4a;
+      border-radius: 6px;
+      background: #102335;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+
+    .export-option:hover {
+      border-color: var(--accent);
+      background: #132d44;
+    }
+
+    .export-option input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .export-option-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .export-option-name {
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .export-option-desc {
+      font-size: 0.75rem;
+      color: #7a96a8;
+    }
+
+    .modal-footer {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      padding-top: 4px;
+    }
+
+    .modal-btn {
+      height: 38px;
+      padding: 0 20px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+    }
+
+    .modal-btn.cancel {
+      background: #102335;
+      border: 1px solid #2b4a60;
+      color: #a0b4c4;
+    }
+
+    .modal-btn.cancel:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .modal-btn.confirm {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+      color: #0B1D2A;
+    }
+
+    .modal-btn.confirm:hover {
+      background: #00b89c;
+    }
+
+    /* ── Block Summary ─────────────────────────────────── */
+    .blocks-layout {
+      width: 100%;
+      min-height: calc(100vh - 92px);
+      padding: 10px 98px 14px 8px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .blocks-toolbar {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .blocks-title {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .blocks-columns {
+      display: grid;
+      grid-template-columns: 1.8fr 0.7fr 0.7fr 0.7fr 2fr 1.8fr 1.2fr;
+      gap: 8px;
+    }
+
+    .blocks-columns > div {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.84rem;
+      letter-spacing: 0.02em;
+    }
+
+    .block-row {
+      border: 1px solid #1a3a50;
+      border-radius: 4px;
+      min-height: 54px;
+      display: grid;
+      grid-template-columns: 1.8fr 0.7fr 0.7fr 0.7fr 2fr 1.8fr 1.2fr;
+      gap: 8px;
+      align-items: center;
+      padding: 0 10px;
+      background: #0c1a2a;
+      transition: border-color 0.15s;
+    }
+
+    .block-row:hover { border-color: var(--accent); }
+
+    .block-row > div {
+      font-size: 0.86rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .block-po-label {
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 0.92rem !important;
+    }
+
+    .block-pass { color: #16d46b; font-weight: 700; text-align: center; }
+    .block-fail { color: #f04444; font-weight: 700; text-align: center; }
+    .block-total { text-align: center; }
+
+    .pf-bar-wrap {
+      height: 8px;
+      border-radius: 4px;
+      background: #f04444;
+      overflow: hidden;
+      flex: 1;
+    }
+
+    .pf-bar-pass {
+      height: 100%;
+      background: #16d46b;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    .view-block-btn {
+      height: 32px;
+      padding: 0 12px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #102335;
+      color: var(--accent);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .view-block-btn:hover { background: #0d3d2e; }
+
+    .blocks-table { display: flex; flex-direction: column; gap: 8px; }
+
+    .info-item.clickable {
+      cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .info-item.clickable:hover {
+      border-color: #ffffff;
+      color: var(--accent);
+    }
+
+    .history-title {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .history-date-controls {
+      display: grid;
+      grid-template-columns: 52px 1fr 52px;
+      gap: 8px;
+    }
+
+    .history-columns {
+      display: grid;
+      grid-template-columns: 2.2fr 0.9fr 1.3fr 1.2fr 1fr 1fr 1fr;
+      gap: 8px;
+    }
+
+    .history-columns div {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.84rem;
+      letter-spacing: 0.02em;
+    }
+
+    .history-table {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .history-row {
+      border: 2px solid #16d46b;
+      border-radius: 4px;
+      min-height: 56px;
+      display: grid;
+      grid-template-columns: 2.2fr 0.9fr 1.3fr 1.2fr 1fr 1fr 1fr;
+      gap: 8px;
+      align-items: center;
+      padding: 0 10px;
+      background: #0c1a2a;
+    }
+
+    .history-row.fail {
+      border-color: #f04444;
+    }
+
+    .history-row div {
+      font-size: 0.88rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .history-row .result-pass {
+      color: #16d46b;
+      font-weight: 700;
+    }
+
+    .history-row .result-fail {
+      color: #f04444;
+      font-weight: 700;
+    }
+
+    .open-folder-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      background: #1fabb0;
+      color: #ffffff;
+      font-size: 1.05rem;
+    }
+
+    /* ── Status bar ─────────────────────────────────────────── */
+    .status-bar {
+      width: 100%;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: #0b1825;
+      overflow: hidden;
+    }
+
+    .status-toggles {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 20px;
+      border-bottom: 1px solid #1a3040;
+    }
+
+    .status-toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .status-mode-label {
+      font-size: 0.8rem;
+      color: #a0b4c4;
+      letter-spacing: 0.05em;
+    }
+
+    .mode-toggle {
+      width: 52px;
+      height: 26px;
+      border: 1px solid #2b4a60;
+      border-radius: 999px;
+      background: #0f2233;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mode-toggle .mode-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #4a6a80;
+      transition: left 0.2s, background 0.2s;
+    }
+
+    .mode-toggle.active {
+      background: #0d3d2e;
+      border-color: var(--accent);
+    }
+
+    .mode-toggle.active .mode-thumb {
+      left: 29px;
+      background: var(--accent);
+    }
+
+    .mode-value {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      min-width: 80px;
+    }
+
+    .status-info-bar {
+      display: flex;
+      align-items: center;
+      padding: 7px 14px;
+      gap: 0;
+      font-size: 0.82rem;
+      color: #c0d0de;
+      min-height: 36px;
+    }
+
+    .status-heartbeat {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding-right: 14px;
+      flex-shrink: 0;
+    }
+
+    .heartbeat-icon {
+      color: #e84444;
+      font-size: 1rem;
+      animation: hbpulse 1s ease-in-out infinite;
+    }
+
+    @keyframes hbpulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.25); }
+    }
+
+    .heartbeat-count {
+      font-weight: 700;
+      letter-spacing: 0.03em;
+    }
+
+    .status-divider {
+      width: 1px;
+      height: 18px;
+      background: #1e3d4a;
+      margin: 0 14px;
+      flex-shrink: 0;
+    }
+
+    .status-recipe {
+      color: #a0c8b8;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .status-path {
+      margin-left: auto;
+      color: #6a8fa8;
+      font-size: 0.78rem;
+      letter-spacing: 0.02em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    /* ── Settings view ───────────────────────────────────────── */
+    .settings-layout {
+      width: 100%;
+      min-height: calc(100vh - 92px);
+      padding: 10px 98px 14px 8px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .settings-toolbar {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .settings-title {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .settings-body {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .settings-section {
+      border: 1px solid #1a3a50;
+      border-radius: 6px;
+      padding: 18px 22px;
+      background: #0c1a2a;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .settings-section-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .settings-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .settings-label {
+      font-size: 0.78rem;
+      color: #a0b4c4;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .settings-input {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #102335;
+      color: var(--text);
+      padding: 8px 12px;
+      font-size: 0.88rem;
+      outline: none;
+      height: 40px;
+      max-width: 480px;
+    }
+
+    .settings-input option {
+      background: #102335;
+    }
+
+    .settings-hint {
+      font-size: 0.75rem;
+      color: #5a7a90;
+      line-height: 1.4;
+    }
+
+    .settings-footer {
+      display: flex;
+      justify-content: flex-end;
+      padding-top: 4px;
+    }
+
+    .settings-save-btn {
+      height: 42px;
+      padding: 0 28px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: var(--accent);
+      color: #0B1D2A;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .settings-save-btn:hover {
+      background: #00b89c;
+    }
+
+    .settings-toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0d3d2e;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 10px 24px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s;
+      z-index: 300;
+    }
+
+    .settings-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .history-filter-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr auto;
+      gap: 8px;
+      align-items: end;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-label {
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .filter-input,
+    .filter-select {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #102335;
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      outline: none;
+      height: 36px;
+      width: 100%;
+    }
+
+    .filter-input::placeholder {
+      color: #5a7a90;
+    }
+
+    .filter-select option {
+      background: #102335;
+    }
+
+    .sort-btn {
+      background: none;
+      border: none;
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 0;
+      width: 100%;
+      justify-content: center;
+      letter-spacing: 0.02em;
+    }
+
+    .sort-btn:hover {
+      color: var(--accent);
+    }
+
+    .sort-arrow {
+      font-size: 0.7rem;
+      opacity: 0.8;
+    }
+
+    .history-pagination {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 6px 0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pagination-info {
+      font-size: 0.83rem;
+      color: #a0b4c4;
+      letter-spacing: 0.02em;
+    }
+
+    .pagination-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .page-btn {
+      min-width: 34px;
+      height: 34px;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      background: #102335;
+      color: var(--text);
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px;
+    }
+
+    .page-btn.active {
+      background: var(--accent);
+      color: #0B1D2A;
+      font-weight: 700;
+    }
+
+    .page-btn:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+
+    @media (max-width: 980px) {
+      .panel-left,
+      .panel-right {
+        width: 130px;
+      }
+
+      .title {
+        font-size: 20px;
+      }
+
+      .info-bar {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+      }
+
+      .viewer {
+        width: min(95%, 820px);
+        height: 360px;
+      }
+
+      .frame-groups {
+        grid-template-columns: repeat(2, minmax(140px, 1fr));
+      }
+
+      .inspection-layout {
+        padding-right: 8px;
+      }
+
+      .history-layout {
+        padding-right: 8px;
+      }
+
+      .history-toolbar {
+        grid-template-columns: 48px 1fr;
+      }
+
+      .history-date-controls {
+        grid-column: 1 / -1;
+      }
+
+      .history-title {
+        font-size: 1.2rem;
+      }
+
+      .history-columns {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+      }
+
+      .history-row {
+        grid-template-columns: repeat(2, minmax(120px, 1fr));
+        padding: 8px;
+      }
+
+      .history-row div {
+        white-space: normal;
+      }
+
+      .side-nav {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="panel panel-left">
+      <img
+        class="logo-left"
+        src="file:///C:/Users/ashus/.cursor/projects/e-AMV-Saputo/assets/c__Users_ashus_AppData_Roaming_Cursor_User_workspaceStorage_699992c6dc87f2d67dba2b098e64a350_images_amv-logo-aecead38-61a6-4e47-93e2-a191617f2b5c.png"
+        alt="Australian Machine Vision logo"
+      />
+    </div>
+
+    <div class="panel panel-center">
+      <h1 class="title">Saputo Inspection System</h1>
+    </div>
+
+    <div class="panel panel-right">
+      <img
+        class="logo-right"
+        src="UI/assets/Saputo.webp"
+        alt="Saputo logo"
+      />
+    </div>
+  </header>
+
+  <main class="inspection-layout view active" id="homeView">
+    <section class="info-bar" aria-label="Inspection Information">
+      <div class="info-item">ID: 1777255143049</div>
+      <div class="info-item">Material: 2000422</div>
+      <div class="info-item clickable" id="homePOTile" title="View Block Summary">PO: 12263045</div>
+      <div class="info-item">Status: <span class="status-pass">&nbsp;PASS</span></div>
+    </section>
+
+    <div class="main-content">
+      <section class="viewer" aria-label="Center Viewer">
+        <button class="arrow-btn left" type="button" aria-label="Previous frame">&#8249;</button>
+        <div class="viewer-frame" id="viewerText">Viewing: TOP - Frame 1</div>
+        <button class="arrow-btn right" type="button" aria-label="Next frame">&#8250;</button>
+        <div class="region-toggle">
+          <span>Region Display ON</span>
+          <span class="toggle-pill" aria-hidden="true"></span>
+        </div>
+      </section>
+
+      <div class="right-panel">
+        <section class="frame-groups" id="frameGroups" aria-label="Frame Groups"></section>
+
+        <div class="panel-toggles">
+          <div class="panel-toggle-item">
+            <span class="status-mode-label">Block Mode</span>
+            <button class="mode-toggle" id="blockModeToggle" type="button" role="switch" aria-checked="false">
+              <span class="mode-thumb"></span>
+            </button>
+            <span class="mode-value" id="blockModeVal">All Blocks</span>
+          </div>
+          <div class="panel-toggle-item">
+            <span class="status-mode-label">Display Mode</span>
+            <button class="mode-toggle active" id="displayModeToggle" type="button" role="switch" aria-checked="true">
+              <span class="mode-thumb"></span>
+            </button>
+            <span class="mode-value" id="displayModeVal">Live</span>
+          </div>
+
+          <div class="panel-info-divider"></div>
+
+          <div class="panel-info-section">
+            <div class="panel-info-row">
+              <span class="panel-info-label">Active Recipe</span>
+              <span class="panel-info-value" id="panelRecipeDisplay">Recipe 1</span>
+            </div>
+            <div class="panel-info-row">
+              <span class="panel-info-label">Image Save Path</span>
+              <span class="panel-info-value panel-info-path" id="panelImagePath">D:\ImageLogs\</span>
+            </div>
+          </div>
+
+          <div class="panel-hb-row">
+            <span class="panel-hb-label">PLC Heartbeat</span>
+            <div class="panel-hb-value">
+              <span class="heartbeat-icon">&#9829;</span>
+              <span class="heartbeat-count" id="heartbeatCount">0</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <section class="history-layout view" id="historyView" aria-label="Historystory">
+    <div class="history-toolbar">
+      <button class="history-back-btn" id="historyBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
+      <div class="history-title">Historystory</div>
+      <div class="history-date-controls">
+        <button class="date-nav" type="button" aria-label="Previous date">&#8249;</button>
+        <div class="date-box">2026-04-27</div>
+        <button class="date-nav" type="button" aria-label="Next date">&#8250;</button>
+      </div>
+    </div>
+
+    <div class="history-filter-bar">
+      <div class="filter-group">
+        <span class="filter-label">Camera Name</span>
+        <input class="filter-input" id="filterCamera" type="text" placeholder="Filter by camera..." />
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Result</span>
+        <select class="filter-select" id="filterResult">
+          <option value="">All</option>
+          <option value="PASS">PASS</option>
+          <option value="FAIL">FAIL</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Frame Number</span>
+        <input class="filter-input" id="filterFrame" type="text" placeholder="Filter by frame..." />
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">Block PO</span>
+        <input class="filter-input" id="filterPO" type="text" placeholder="Filter by PO..." />
+      </div>
+      <div class="filter-group" style="justify-content:flex-end; flex-direction:row; align-items:flex-end;">
+        <button class="export-csv-btn" id="exportCsvBtn" type="button">&#8681; Export CSV</button>
+      </div>
+    </div>
+
+    <!-- Export modal -->
+    <div class="modal-overlay hidden" id="exportModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">Export to CSV</span>
+          <button class="modal-close" id="exportModalClose" type="button" aria-label="Close">&#10005;</button>
+        </div>
+        <div>
+          <div class="modal-section-label">Select data to export</div>
+          <div class="export-options">
+            <label class="export-option">
+              <input type="checkbox" id="expAll" />
+              <div class="export-option-text">
+                <span class="export-option-name">All Records</span>
+                <span class="export-option-desc">Export every record regardless of current filters</span>
+              </div>
+            </label>
+            <label class="export-option">
+              <input type="checkbox" id="expFiltered" />
+              <div class="export-option-text">
+                <span class="export-option-name">Filtered Records</span>
+                <span class="export-option-desc">Export only records matching the active filters</span>
+              </div>
+            </label>
+            <label class="export-option">
+              <input type="checkbox" id="expCurrentPage" />
+              <div class="export-option-text">
+                <span class="export-option-name">Current Page Only</span>
+                <span class="export-option-desc">Export the 20 records visible on this page</span>
+              </div>
+            </label>
+            <label class="export-option">
+              <input type="checkbox" id="expFail" />
+              <div class="export-option-text">
+                <span class="export-option-name">FAIL Records Only</span>
+                <span class="export-option-desc">Export only inspections that failed</span>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="modal-btn cancel" id="exportModalCancel" type="button">Cancel</button>
+          <button class="modal-btn confirm" id="exportModalConfirm" type="button">&#8681; Download</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="history-columns">
+      <div>
+        <button class="sort-btn" id="sortTimestampBtn" type="button">
+          Timestamp <span class="sort-arrow" id="sortArrow">&#9660;</span>
+        </button>
+      </div>
+      <div>Result</div>
+      <div>Material Number</div>
+      <div>Block PO</div>
+      <div>Camera Name</div>
+      <div>Frame Number</div>
+      <div>Open Folder</div>
+    </div>
+
+    <div class="history-table" id="historyTable"></div>
+    <div class="history-pagination" id="historyPagination"></div>
+  </section>
+
+  <!-- Settings view -->
+  <section class="settings-layout view" id="settingsView" aria-label="Settings">
+    <div class="settings-toolbar">
+      <button class="history-back-btn" id="settingsBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
+      <div class="settings-title">Settings</div>
+    </div>
+
+    <div class="settings-body">
+      <div class="settings-section">
+        <h2 class="settings-section-title">Recipe Configuration</h2>
+        <div class="settings-field">
+          <label class="settings-label" for="recipeSelect">Active Recipe</label>
+          <select class="settings-input" id="recipeSelect">
+            <option value="1">Recipe 1</option>
+            <option value="2">Recipe 2</option>
+            <option value="3">Recipe 3</option>
+            <option value="4">Recipe 4</option>
+            <option value="5">Recipe 5</option>
+          </select>
+          <p class="settings-hint">Defines the inspection parameters applied to each captured frame. The selected recipe will be shown in the status bar on the Home screen.</p>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <h2 class="settings-section-title">Image Save Path</h2>
+        <div class="settings-field">
+          <label class="settings-label" for="savePathInput">Save Directory</label>
+          <input class="settings-input" id="savePathInput" type="text" placeholder="e.g. D:\ImageLogs\" />
+          <p class="settings-hint">Captured frames are stored under this directory, organised by result and timestamp (e.g. D:\ImageLogs\PASS\2026_04_27_09-13-47-626).</p>
+        </div>
+      </div>
+
+      <div class="settings-footer">
+        <button class="settings-save-btn" id="settingsSaveBtn" type="button">&#10003; Save Settings</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="settings-toast" id="settingsToast">Settings saved successfully</div>
+
+  <!-- Block Summary view -->
+  <section class="blocks-layout view" id="blocksView" aria-label="Block Summary">
+    <div class="blocks-toolbar">
+      <button class="history-back-btn" id="blocksBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
+      <div class="blocks-title">Block Summary</div>
+    </div>
+
+    <div class="blocks-columns">
+      <div>Block PO</div>
+      <div>Total</div>
+      <div>Pass</div>
+      <div>Fail</div>
+      <div>Pass Rate</div>
+      <div>Last Inspection</div>
+      <div>Details</div>
+    </div>
+
+    <div class="blocks-table" id="blocksTable"></div>
+  </section>
+
+  <aside class="side-nav" aria-label="Right navigation">
+    <button class="nav-btn back collapse-btn" id="navCollapseBtn" title="Collapse" type="button">&#8249;</button>
+    <button class="nav-btn active" title="Home" type="button" data-view="home">
+      <span class="nav-icon" aria-hidden="true">&#8962;</span>
+      <span class="nav-label">Home</span>
+    </button>
+    <button class="nav-btn" title="Image Logs" type="button">
+      <span class="nav-icon" aria-hidden="true">&#128247;</span>
+      <span class="nav-label">ImageLogs</span>
+    </button>
+    <button class="nav-btn" title="History" type="button" data-view="history">
+      <span class="nav-icon" aria-hidden="true">&#8635;</span>
+      <span class="nav-label">History</span>
+    </button>
+    <button class="nav-btn" title="Blocks" type="button" data-view="blocks">
+      <span class="nav-icon" aria-hidden="true">&#9635;</span>
+      <span class="nav-label">Blocks</span>
+    </button>
+    <button class="nav-btn" title="Settings" type="button" data-view="settings">
+      <span class="nav-icon" aria-hidden="true">&#9881;</span>
+      <span class="nav-label">Settings</span>
+    </button>
+    <button class="nav-btn" title="Exit" type="button">
+      <span class="nav-icon" aria-hidden="true">&#8680;</span>
+      <span class="nav-label">Exit</span>
+    </button>
+  </aside>
+
+  <script>
+    const frames = {
+      top: [1, 2],
+      bottom: [1, 2, 3, 4, 5],
+      front: [1, 2],
+      back: [1, 2],
+      lead: [1],
+      trail: [1]
+    };
+
+    const defectFrames = {
+      top: [2],
+      bottom: [2, 4],
+      front: [1],
+      back: [2],
+      lead: [],
+      trail: [1]
+    };
+
+    let selectedGroup = "top";
+    let selectedFrame = 1;
+
+    const viewerText = document.getElementById("viewerText");
+    const frameGroups = document.getElementById("frameGroups");
+    const historyTable = document.getElementById("historyTable");
+    const historyPagination = document.getElementById("historyPagination");
+    const homeView = document.getElementById("homeView");
+    const historyView = document.getElementById("historyView");
+    const navViewButtons = document.querySelectorAll(".nav-btn[data-view]");
+
+    const HIST_PAGE_SIZE = 20;
+    let histPage = 1;
+    let histSortDir = "desc";
+
+    const historyRows = [
+      { timestamp: "2026_04_27_09-13-47-626", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-13-17-314", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-12-48-281", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-12-38-587", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-11-57-126", result: "FAIL", material: "2000422", po: "12263045", camera: "CAM_TP", frame: "1", status: "fail" },
+      { timestamp: "2026_04_27_09-11-50-755", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-11-41-349", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-11-26-998", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-11-21-570", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-11-15-031", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-10-58-442", result: "FAIL", material: "2000449", po: "12265713", camera: "CAM_BK", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-10-43-119", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-10-27-806", result: "FAIL", material: "2006844", po: "12263019", camera: "CAM_FR", frame: "1", status: "fail" },
+      { timestamp: "2026_04_27_09-10-12-264", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-09-58-103", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-09-44-872", result: "FAIL", material: "2006844", po: "12263019", camera: "CAM_TP", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-09-31-540", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-09-17-219", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-09-02-884", result: "FAIL", material: "2000449", po: "12265713", camera: "CAM_BT", frame: "3", status: "fail" },
+      { timestamp: "2026_04_27_09-08-48-661", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-08-33-425", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-08-19-007", result: "FAIL", material: "2000449", po: "12265713", camera: "CAM_FR", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-08-05-773", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-07-51-348", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-07-37-902", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-07-22-514", result: "FAIL", material: "2006844", po: "12263019", camera: "CAM_BK", frame: "1", status: "fail" },
+      { timestamp: "2026_04_27_09-07-08-190", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-06-53-667", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-06-39-281", result: "FAIL", material: "2000422", po: "12263045", camera: "CAM_TP", frame: "1", status: "fail" },
+      { timestamp: "2026_04_27_09-06-24-958", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-06-10-443", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-05-55-817", result: "FAIL", material: "2006844", po: "12263019", camera: "CAM_BT", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-05-41-392", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-05-26-874", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-05-12-559", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-04-57-133", result: "FAIL", material: "2000422", po: "12263045", camera: "CAM_FR", frame: "1", status: "fail" },
+      { timestamp: "2026_04_27_09-04-43-708", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-04-28-284", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-04-13-961", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-03-59-536", result: "FAIL", material: "2000449", po: "12265713", camera: "CAM_BK", frame: "3", status: "fail" },
+      { timestamp: "2026_04_27_09-03-44-110", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-03-30-785", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-03-15-260", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-03-00-934", result: "FAIL", material: "2006844", po: "12263019", camera: "CAM_TP", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-02-46-509", result: "PASS", material: "2000422", po: "12263045", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-02-32-183", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-02-17-758", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-02-02-332", result: "FAIL", material: "2000422", po: "12263045", camera: "CAM_FR", frame: "2", status: "fail" },
+      { timestamp: "2026_04_27_09-01-47-007", result: "PASS", material: "2000449", po: "12265713", camera: "-",      frame: "-", status: "pass" },
+      { timestamp: "2026_04_27_09-01-33-582", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" }
+    ];
+
+    function updateViewer() {
+      viewerText.textContent = `Viewing: ${selectedGroup.toUpperCase()} - Frame ${selectedFrame}`;
+    }
+
+    function renderGroups() {
+      frameGroups.innerHTML = "";
+
+      Object.entries(frames).forEach(([group, frameNumbers]) => {
+        const groupCard = document.createElement("article");
+        groupCard.className = "group";
+
+        const title = document.createElement("h3");
+        title.textContent = group.toUpperCase();
+        groupCard.appendChild(title);
+
+        const list = document.createElement("div");
+        list.className = "frame-list";
+
+        frameNumbers.forEach((frameNumber) => {
+          const item = document.createElement("button");
+          item.type = "button";
+          item.className = "frame-item";
+
+          if (group === selectedGroup && frameNumber === selectedFrame) {
+            item.classList.add("selected");
+          }
+
+          const label = document.createElement("span");
+          label.textContent = `Frame ${frameNumber}`;
+
+          const indicator = document.createElement("span");
+          const hasDefect = (defectFrames[group] || []).includes(frameNumber);
+          indicator.className = `indicator ${hasDefect ? "defect" : "ok"}`;
+
+          item.appendChild(label);
+          item.appendChild(indicator);
+
+          item.addEventListener("click", () => {
+            selectedGroup = group;
+            selectedFrame = frameNumber;
+            updateViewer();
+            renderGroups();
+          });
+
+          list.appendChild(item);
+        });
+
+        groupCard.appendChild(list);
+        frameGroups.appendChild(groupCard);
+      });
+    }
+
+    function getFilteredSorted() {
+      const camVal = document.getElementById("filterCamera").value.trim().toLowerCase();
+      const resVal = document.getElementById("filterResult").value;
+      const frmVal = document.getElementById("filterFrame").value.trim().toLowerCase();
+      const poVal  = document.getElementById("filterPO").value.trim().toLowerCase();
+
+      let data = historyRows.filter((r) => {
+        if (camVal && !r.camera.toLowerCase().includes(camVal)) return false;
+        if (resVal && r.result !== resVal) return false;
+        if (frmVal && !r.frame.toLowerCase().includes(frmVal)) return false;
+        if (poVal  && !r.po.toLowerCase().includes(poVal))     return false;
+        return true;
+      });
+
+      data.sort((a, b) =>
+        histSortDir === "asc"
+          ? a.timestamp.localeCompare(b.timestamp)
+          : b.timestamp.localeCompare(a.timestamp)
+      );
+
+      return data;
+    }
+
+    function renderPagination(total, totalPages) {
+      historyPagination.innerHTML = "";
+
+      const start = (histPage - 1) * HIST_PAGE_SIZE + 1;
+      const end = Math.min(histPage * HIST_PAGE_SIZE, total);
+
+      const info = document.createElement("span");
+      info.className = "pagination-info";
+      info.textContent = total === 0
+        ? "No records found"
+        : `Showing ${start}–${end} of ${total} record${total !== 1 ? "s" : ""}`;
+      historyPagination.appendChild(info);
+
+      if (totalPages <= 1) return;
+
+      const controls = document.createElement("div");
+      controls.className = "pagination-controls";
+
+      function makeBtn(label, page, isActive, isDisabled) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "page-btn" + (isActive ? " active" : "");
+        btn.textContent = label;
+        btn.disabled = isDisabled;
+        if (!isDisabled && !isActive) {
+          btn.addEventListener("click", () => { histPage = page; renderHistory(); });
+        }
+        return btn;
+      }
+
+      controls.appendChild(makeBtn("‹ Prev", histPage - 1, false, histPage === 1));
+
+      const pages = [];
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages.push(1);
+        if (histPage > 3) pages.push("…");
+        for (let i = Math.max(2, histPage - 1); i <= Math.min(totalPages - 1, histPage + 1); i++) pages.push(i);
+        if (histPage < totalPages - 2) pages.push("…");
+        pages.push(totalPages);
+      }
+
+      pages.forEach((p) => {
+        if (p === "…") {
+          const ellipsis = document.createElement("span");
+          ellipsis.className = "pagination-info";
+          ellipsis.textContent = "…";
+          controls.appendChild(ellipsis);
+        } else {
+          controls.appendChild(makeBtn(p, p, p === histPage, p === histPage));
+        }
+      });
+
+      controls.appendChild(makeBtn("Next ›", histPage + 1, false, histPage === totalPages));
+      historyPagination.appendChild(controls);
+    }
+
+    function renderHistory() {
+      const filtered = getFilteredSorted();
+      const totalPages = Math.max(1, Math.ceil(filtered.length / HIST_PAGE_SIZE));
+      if (histPage > totalPages) histPage = totalPages;
+
+      const pageData = filtered.slice((histPage - 1) * HIST_PAGE_SIZE, histPage * HIST_PAGE_SIZE);
+
+      historyTable.innerHTML = "";
+      pageData.forEach((row) => {
+        const entry = document.createElement("div");
+        entry.className = `history-row ${row.status === "fail" ? "fail" : ""}`;
+        entry.innerHTML = `
+          <div>${row.timestamp}</div>
+          <div class="${row.status === "fail" ? "result-fail" : "result-pass"}">${row.result}</div>
+          <div>${row.material}</div>
+          <div>${row.po}</div>
+          <div>${row.camera}</div>
+          <div>${row.frame}</div>
+          <div><span class="open-folder-btn" title="Open Folder">&#128193;</span></div>
+        `;
+        historyTable.appendChild(entry);
+      });
+
+      renderPagination(filtered.length, totalPages);
+
+      const arrow = document.getElementById("sortArrow");
+      if (arrow) arrow.innerHTML = histSortDir === "asc" ? "&#9650;" : "&#9660;";
+    }
+
+    const settingsView = document.getElementById("settingsView");
+    const blocksView   = document.getElementById("blocksView");
+
+    function setActiveView(viewName) {
+      homeView.classList.toggle("active",     viewName === "home");
+      historyView.classList.toggle("active",  viewName === "history");
+      settingsView.classList.toggle("active", viewName === "settings");
+      blocksView.classList.toggle("active",   viewName === "blocks");
+
+      navViewButtons.forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.view === viewName);
+      });
+
+      if (viewName === "blocks") renderBlocks();
+    }
+
+    navViewButtons.forEach((btn) => {
+      btn.addEventListener("click", () => setActiveView(btn.dataset.view));
+    });
+
+    document.getElementById("historyBackBtn").addEventListener("click", () => setActiveView("home"));
+    document.getElementById("settingsBackBtn").addEventListener("click", () => setActiveView("home"));
+    document.getElementById("blocksBackBtn").addEventListener("click",  () => setActiveView("home"));
+
+    document.getElementById("homePOTile").addEventListener("click", () => setActiveView("blocks"));
+
+    document.getElementById("sortTimestampBtn").addEventListener("click", () => {
+      histSortDir = histSortDir === "desc" ? "asc" : "desc";
+      histPage = 1;
+      renderHistory();
+    });
+
+    ["filterCamera", "filterResult", "filterFrame", "filterPO"].forEach((id) => {
+      document.getElementById(id).addEventListener("input", () => {
+        histPage = 1;
+        renderHistory();
+      });
+    });
+
+    // ── Block Summary ─────────────────────────────────────────
+    function getBlockSummary() {
+      const map = {};
+      historyRows.forEach((r) => {
+        if (!map[r.po]) {
+          map[r.po] = { po: r.po, total: 0, pass: 0, fail: 0, first: r.timestamp, last: r.timestamp };
+        }
+        const b = map[r.po];
+        b.total++;
+        if (r.status === "pass") b.pass++; else b.fail++;
+        if (r.timestamp < b.first) b.first = r.timestamp;
+        if (r.timestamp > b.last)  b.last  = r.timestamp;
+      });
+      return Object.values(map).sort((a, b) => b.last.localeCompare(a.last));
+    }
+
+    function renderBlocks() {
+      const table = document.getElementById("blocksTable");
+      table.innerHTML = "";
+
+      getBlockSummary().forEach((block) => {
+        const passRate = Math.round((block.pass / block.total) * 100);
+        const row = document.createElement("div");
+        row.className = "block-row";
+        row.innerHTML = `
+          <div class="block-po-label">${block.po}</div>
+          <div class="block-total">${block.total}</div>
+          <div class="block-pass">${block.pass}</div>
+          <div class="block-fail">${block.fail}</div>
+          <div style="display:flex;align-items:center;gap:6px;padding-right:6px;">
+            <div class="pf-bar-wrap"><div class="pf-bar-pass" style="width:${passRate}%"></div></div>
+            <span style="font-size:0.76rem;color:#a0b4c4;flex-shrink:0;width:34px;text-align:right">${passRate}%</span>
+          </div>
+          <div style="font-size:0.76rem;color:#6a8fa8">${block.last.replace(/_/g," ")}</div>
+          <div><button class="view-block-btn" data-po="${block.po}">View Details &#8594;</button></div>
+        `;
+        table.appendChild(row);
+      });
+
+      table.querySelectorAll(".view-block-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document.getElementById("filterPO").value = btn.dataset.po;
+          histPage = 1;
+          setActiveView("history");
+          renderHistory();
+        });
+      });
+    }
+
+    // Export modal
+    const exportModal = document.getElementById("exportModal");
+
+    function openExportModal() {
+      ["expAll","expFiltered","expCurrentPage","expFail"].forEach(id => {
+        document.getElementById(id).checked = false;
+      });
+      exportModal.classList.remove("hidden");
+    }
+
+    function closeExportModal() {
+      exportModal.classList.add("hidden");
+    }
+
+    function rowsToCsv(rows) {
+      const headers = ["Timestamp","Result","Material Number","Block PO","Camera Name","Frame Number"];
+      const lines = [headers.join(",")];
+      rows.forEach(r => {
+        lines.push([r.timestamp, r.result, r.material, r.po, r.camera, r.frame].join(","));
+      });
+      return lines.join("\n");
+    }
+
+    function downloadCsv(content, filename) {
+      const blob = new Blob([content], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    document.getElementById("exportCsvBtn").addEventListener("click", openExportModal);
+    document.getElementById("exportModalClose").addEventListener("click", closeExportModal);
+    document.getElementById("exportModalCancel").addEventListener("click", closeExportModal);
+    exportModal.addEventListener("click", (e) => { if (e.target === exportModal) closeExportModal(); });
+
+    document.getElementById("exportModalConfirm").addEventListener("click", () => {
+      const expAll         = document.getElementById("expAll").checked;
+      const expFiltered    = document.getElementById("expFiltered").checked;
+      const expCurrentPage = document.getElementById("expCurrentPage").checked;
+      const expFail        = document.getElementById("expFail").checked;
+
+      if (!expAll && !expFiltered && !expCurrentPage && !expFail) {
+        alert("Please select at least one export option.");
+        return;
+      }
+
+      const filtered = getFilteredSorted();
+      const pageData  = filtered.slice((histPage - 1) * HIST_PAGE_SIZE, histPage * HIST_PAGE_SIZE);
+
+      if (expAll)         downloadCsv(rowsToCsv(historyRows), "history_all.csv");
+      if (expFiltered)    downloadCsv(rowsToCsv(filtered),    "history_filtered.csv");
+      if (expCurrentPage) downloadCsv(rowsToCsv(pageData),    "history_page_" + histPage + ".csv");
+      if (expFail)        downloadCsv(rowsToCsv(historyRows.filter(r => r.status === "fail")), "history_fail.csv");
+
+      closeExportModal();
+    });
+
+    // ── Heartbeat counter ────────────────────────────────────
+    let heartbeatVal = 0;
+    const heartbeatEl = document.getElementById("heartbeatCount");
+    setInterval(() => {
+      heartbeatVal++;
+      heartbeatEl.textContent = heartbeatVal;
+    }, 1000);
+
+    // ── Block Mode toggle ─────────────────────────────────────
+    const blockToggle  = document.getElementById("blockModeToggle");
+    const blockValEl   = document.getElementById("blockModeVal");
+    let blockModeOn = false;
+    blockToggle.addEventListener("click", () => {
+      blockModeOn = !blockModeOn;
+      blockToggle.classList.toggle("active", blockModeOn);
+      blockToggle.setAttribute("aria-checked", blockModeOn);
+      blockValEl.textContent = blockModeOn ? "Single Block" : "All Blocks";
+    });
+
+    // ── Display Mode toggle ───────────────────────────────────
+    const displayToggle = document.getElementById("displayModeToggle");
+    const displayValEl  = document.getElementById("displayModeVal");
+    let displayModeOn = true;
+    displayToggle.addEventListener("click", () => {
+      displayModeOn = !displayModeOn;
+      displayToggle.classList.toggle("active", displayModeOn);
+      displayToggle.setAttribute("aria-checked", displayModeOn);
+      displayValEl.textContent = displayModeOn ? "Live" : "Static";
+    });
+
+    // ── Settings save / load ──────────────────────────────────
+    const recipeSelect  = document.getElementById("recipeSelect");
+    const savePathInput = document.getElementById("savePathInput");
+    const settingsToast = document.getElementById("settingsToast");
+
+    const panelRecipeDisplay = document.getElementById("panelRecipeDisplay");
+    const panelImagePath     = document.getElementById("panelImagePath");
+
+    function updatePanelInfo(recipe, path) {
+      if (panelRecipeDisplay) panelRecipeDisplay.textContent = "Recipe " + recipe;
+      if (panelImagePath)     panelImagePath.textContent     = path;
+    }
+
+    function loadSettings() {
+      const recipe = localStorage.getItem("saputo_recipe") || "1";
+      const path   = localStorage.getItem("saputo_savepath") || "D:\\ImageLogs\\";
+      if (recipeSelect)  recipeSelect.value  = recipe;
+      if (savePathInput) savePathInput.value = path;
+      updatePanelInfo(recipe, path);
+    }
+
+    document.getElementById("settingsSaveBtn").addEventListener("click", () => {
+      const recipe = recipeSelect.value;
+      const path   = savePathInput.value.trim() || "D:\\ImageLogs\\";
+      localStorage.setItem("saputo_recipe",   recipe);
+      localStorage.setItem("saputo_savepath", path);
+      updatePanelInfo(recipe, path);
+
+      settingsToast.classList.add("show");
+      setTimeout(() => settingsToast.classList.remove("show"), 2500);
+    });
+
+    loadSettings();
+
+    // ── Navbar collapse ───────────────────────────────────────
+    const sideNav       = document.querySelector(".side-nav");
+    const navCollapseBtn = document.getElementById("navCollapseBtn");
+    let navCollapsed = false;
+
+    navCollapseBtn.addEventListener("click", () => {
+      navCollapsed = !navCollapsed;
+      sideNav.classList.toggle("collapsed", navCollapsed);
+      document.body.classList.toggle("nav-collapsed", navCollapsed);
+      navCollapseBtn.innerHTML = navCollapsed ? "&#8250;" : "&#8249;";
+      navCollapseBtn.title = navCollapsed ? "Expand" : "Collapse";
+    });
+
+    // ── Region Display toggle ─────────────────────────────────
+    const regionToggleEl = document.querySelector(".region-toggle");
+    const regionPill     = regionToggleEl.querySelector(".toggle-pill");
+    const regionLabel    = regionToggleEl.querySelector("span");
+    let regionOn = true;
+
+    regionToggleEl.addEventListener("click", () => {
+      regionOn = !regionOn;
+      regionPill.classList.toggle("off", !regionOn);
+      regionLabel.textContent = regionOn ? "Region Display ON" : "Region Display OFF";
+    });
+
+    updateViewer();
+    renderGroups();
+    renderHistory();
+  </script>
+</body>
+</html>
