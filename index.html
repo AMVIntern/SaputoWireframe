@@ -161,6 +161,30 @@
       letter-spacing: 0.05em;
       text-transform: uppercase;
       font-size: 1rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .viewer-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .viewer-label {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.55);
+      color: var(--accent);
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      padding: 3px 10px;
+      border-radius: 4px;
+      pointer-events: none;
+      white-space: nowrap;
     }
 
     .arrow-btn {
@@ -704,6 +728,240 @@
 
     .modal-btn.confirm:hover {
       background: #00b89c;
+    }
+
+    /* ── All Frames View ───────────────────────────────── */
+    .allframes-layout {
+      width: 100%;
+      height: calc(100vh - 92px);
+      padding: 10px 98px 14px 8px;
+      flex-direction: column;
+      gap: 10px;
+      overflow: hidden;
+    }
+
+    .allframes-toolbar {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      gap: 10px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .allframes-title {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .allframes-body {
+      display: flex;
+      gap: 10px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    /* column-based all-frames grid */
+    .allframes-grid {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: row;
+      gap: 6px;
+      overflow: hidden;
+    }
+
+    /* one column per camera (LD+TL share one column) */
+    .af-cam-col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+      min-height: 0;
+    }
+
+    .af-col-label {
+      flex-shrink: 0;
+      height: 26px;
+      border: 1px solid var(--accent);
+      border-radius: 5px;
+      background: #0a1520;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .af-col-frames {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 0;
+    }
+
+    /* sub-section used inside the LD+TL combined column */
+    .af-sub-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .af-tile {
+      flex: 1;
+      min-height: 0;
+      border: 1px solid #1a3a50;
+      border-radius: 5px;
+      background: #0c1a2a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transition: border-color 0.15s;
+      min-width: 0;
+      cursor: pointer;
+    }
+
+    .af-tile:hover { border-color: var(--accent); }
+
+    .af-tile-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 3px 6px;
+      background: #0a1520;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #a0c8d8;
+      flex-shrink: 0;
+    }
+
+    .af-tile-indicator {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .af-tile-indicator.ok     { background: #16d46b; }
+    .af-tile-indicator.defect { background: #f04444; }
+
+    .af-tile-img {
+      flex: 1;
+      width: 100%;
+      object-fit: contain;
+      background: #060f18;
+      display: block;
+      min-height: 0;
+    }
+
+    .af-status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: #0b1825;
+      padding: 0 16px;
+      height: 38px;
+    }
+
+    .af-strip-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .af-strip-label {
+      font-size: 0.72rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+    }
+
+    .af-strip-value {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #c0d0de;
+    }
+
+    .af-strip-divider {
+      width: 1px;
+      height: 20px;
+      background: #1a3a50;
+      flex-shrink: 0;
+    }
+
+    /* Lightbox */
+    .af-lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 300;
+    }
+
+    .af-lightbox.hidden { display: none; }
+
+    .af-lightbox-inner {
+      position: relative;
+      max-width: 90vw;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .af-lightbox-img {
+      max-width: 90vw;
+      max-height: 82vh;
+      object-fit: contain;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+    }
+
+    .af-lightbox-label {
+      color: var(--accent);
+      font-size: 0.9rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+    }
+
+    .af-lightbox-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
     }
 
     /* ── Diagnostics Viewer ────────────────────────────── */
@@ -1511,7 +1769,10 @@
     <div class="main-content">
       <section class="viewer" aria-label="Center Viewer">
         <button class="arrow-btn left" type="button" aria-label="Previous frame">&#8249;</button>
-        <div class="viewer-frame" id="viewerText">Viewing: TOP - Frame 1</div>
+        <div class="viewer-frame" id="viewerFrame">
+          <img id="viewerImg" src="" alt="" />
+          <span class="viewer-label" id="viewerLabel">TOP - Frame 1</span>
+        </div>
         <button class="arrow-btn right" type="button" aria-label="Next frame">&#8250;</button>
         <div class="region-toggle">
           <span>Region Display ON</span>
@@ -1726,6 +1987,57 @@
     <div class="blocks-table" id="blocksTable"></div>
   </section>
 
+  <!-- Lightbox -->
+  <div class="af-lightbox hidden" id="afLightbox">
+    <div class="af-lightbox-inner">
+      <button class="af-lightbox-close" id="afLightboxClose" type="button">&#10005;</button>
+      <img class="af-lightbox-img" id="afLightboxImg" src="" alt="" />
+      <span class="af-lightbox-label" id="afLightboxLabel"></span>
+    </div>
+  </div>
+
+  <section class="allframes-layout view" id="allframesView" aria-label="All Frames">
+    <div class="allframes-toolbar">
+      <button class="history-back-btn" id="allframesBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
+      <div class="allframes-title">All Frames View</div>
+    </div>
+
+    <!-- compact status strip -->
+    <div class="af-status-strip">
+      <div class="af-strip-item">
+        <span class="af-strip-label">Block Mode</span>
+        <button class="mode-toggle" id="afBlockModeToggle" type="button" role="switch" aria-checked="false"><span class="mode-thumb"></span></button>
+        <span class="mode-value" id="afBlockModeVal">All Blocks</span>
+      </div>
+      <div class="af-strip-divider"></div>
+      <div class="af-strip-item">
+        <span class="af-strip-label">Display Mode</span>
+        <button class="mode-toggle active" id="afDisplayModeToggle" type="button" role="switch" aria-checked="true"><span class="mode-thumb"></span></button>
+        <span class="mode-value" id="afDisplayModeVal">Live</span>
+      </div>
+      <div class="af-strip-divider"></div>
+      <div class="af-strip-item">
+        <span class="af-strip-label">Active Recipe</span>
+        <span class="af-strip-value" id="afRecipeDisplay">Recipe 1</span>
+      </div>
+      <div class="af-strip-divider"></div>
+      <div class="af-strip-item">
+        <span class="af-strip-label">Image Save Path</span>
+        <span class="af-strip-value" id="afImagePath">D:\ImageLogs\</span>
+      </div>
+      <div class="af-strip-divider"></div>
+      <div class="af-strip-item">
+        <span class="heartbeat-icon" style="color:#f04444;">&#9829;</span>
+        <span class="af-strip-label">PLC Heartbeat</span>
+        <span class="af-strip-value" style="color:#f04444;" id="afHeartbeatCount">0</span>
+      </div>
+    </div>
+
+    <div class="allframes-body">
+      <div class="allframes-grid" id="allframesGrid"></div>
+    </div>
+  </section>
+
   <section class="diag-layout view" id="diagView" aria-label="Diagnostics Viewer">
     <div class="diag-toolbar">
       <button class="history-back-btn" id="diagBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
@@ -1757,12 +2069,22 @@
       <span class="nav-icon" aria-hidden="true">&#8962;</span>
       <span class="nav-label">Home</span>
     </button>
+    <button class="nav-btn" title="All Frames" type="button" data-view="allframes">
+      <span class="nav-icon" aria-hidden="true">&#9638;</span>
+      <span class="nav-label">All Frames</span>
+    </button>
     <button class="nav-btn" title="Image Logs" type="button">
-      <span class="nav-icon" aria-hidden="true">&#128247;</span>
+      <span class="nav-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21,15 16,10 5,21"/>
+        </svg>
+      </span>
       <span class="nav-label">ImageLogs</span>
     </button>
     <button class="nav-btn" title="History" type="button" data-view="history">
-      <span class="nav-icon" aria-hidden="true">&#8635;</span>
+      <span class="nav-icon" aria-hidden="true">&#9776;</span>
       <span class="nav-label">History</span>
     </button>
     <button class="nav-btn" title="Blocks" type="button" data-view="blocks">
@@ -1799,12 +2121,12 @@
 
   <script>
     const frames = {
-      top: [1, 2],
+      back:   [1, 2],
       bottom: [1, 2, 3, 4, 5],
-      front: [1, 2],
-      back: [1, 2],
-      lead: [1],
-      trail: [1]
+      front:  [1, 2],
+      lead:   [1],
+      trail:  [1],
+      top:    [1, 2]
     };
 
     const defectFrames = {
@@ -1819,7 +2141,8 @@
     let selectedGroup = "top";
     let selectedFrame = 1;
 
-    const viewerText = document.getElementById("viewerText");
+    const viewerImg   = document.getElementById("viewerImg");
+    const viewerLabel = document.getElementById("viewerLabel");
     const frameGroups = document.getElementById("frameGroups");
     const historyTable = document.getElementById("historyTable");
     const historyPagination = document.getElementById("historyPagination");
@@ -1884,8 +2207,37 @@
       { timestamp: "2026_04_27_09-01-33-582", result: "PASS", material: "2006844", po: "12263019", camera: "-",      frame: "-", status: "pass" }
     ];
 
+    const groupToCode = { top: "TP", bottom: "BT", front: "FT", back: "BK", lead: "LD", trail: "TL" };
+
+    const imageMap = {
+      "TP1": "2026_05_04_15-58-28-045_CAM_TP1_12269535_2008163_1.png",
+      "TP2": "2026_05_04_15-58-28-045_CAM_TP2_12269535_2008163_1.png",
+      "BT1": "2026_05_04_15-58-28-045_CAM_BT1_12269535_2008163_1.png",
+      "BT2": "2026_05_04_15-58-28-045_CAM_BT2_12269535_2008163_1.png",
+      "BT3": "2026_05_04_15-58-28-045_CAM_BT3_12269535_2008163_1.png",
+      "BT4": "2026_05_04_15-58-28-045_CAM_BT4_12269535_2008163_1.png",
+      "BT5": "2026_05_04_15-58-28-045_CAM_BT5_12269535_2008163_1.png",
+      "FT1": "2026_05_04_15-58-28-045_CAM_FT1_12269535_2008163_1.png",
+      "FT2": "2026_05_04_15-58-28-045_CAM_FT2_12269535_2008163_1.png",
+      "BK1": "2026_05_04_15-58-28-045_CAM_BK1_12269535_2008163_1.png",
+      "BK2": "2026_05_04_15-58-28-045_CAM_BK2_12269535_2008163_1.png",
+      "LD1": "2026_05_04_15-58-28-045_CAM_LD1_12269535_2008163_1.png",
+      "TL1": "2026_05_04_15-58-28-045_CAM_TL1_12269535_2008163_1.png",
+    };
+
     function updateViewer() {
-      viewerText.textContent = `Viewing: ${selectedGroup.toUpperCase()} - Frame ${selectedFrame}`;
+      const code = groupToCode[selectedGroup];
+      const key  = `${code}${selectedFrame}`;
+      const file = imageMap[key];
+      viewerLabel.textContent = `${selectedGroup.toUpperCase()} — Frame ${selectedFrame}`;
+      if (file) {
+        viewerImg.src = `UI/assets/Images/${file}`;
+        viewerImg.alt = key;
+        viewerImg.style.display = "block";
+      } else {
+        viewerImg.src = "";
+        viewerImg.style.display = "none";
+      }
     }
 
     function renderGroups() {
@@ -2047,8 +2399,9 @@
     }
 
     const settingsView = document.getElementById("settingsView");
-    const blocksView   = document.getElementById("blocksView");
-    const diagView     = document.getElementById("diagView");
+    const blocksView      = document.getElementById("blocksView");
+    const diagView        = document.getElementById("diagView");
+    const allframesView   = document.getElementById("allframesView");
 
     /* ── Diagnostics data ─────────────────────────────── */
     const diagRows = [
@@ -2094,19 +2447,140 @@
         </div>`).join("");
     }
 
+    const afLightbox      = document.getElementById("afLightbox");
+    const afLightboxImg   = document.getElementById("afLightboxImg");
+    const afLightboxLabel = document.getElementById("afLightboxLabel");
+    const afLightboxClose = document.getElementById("afLightboxClose");
+
+    function openLightbox(src, label) {
+      afLightboxImg.src       = src;
+      afLightboxLabel.textContent = label;
+      afLightbox.classList.remove("hidden");
+    }
+
+    afLightboxClose.addEventListener("click", () => afLightbox.classList.add("hidden"));
+    afLightbox.addEventListener("click", (e) => {
+      if (e.target === afLightbox) afLightbox.classList.add("hidden");
+    });
+
+    function makeTile(group, fn) {
+      const code      = groupToCode[group];
+      const key       = `${code}${fn}`;
+      const file      = imageMap[key];
+      const hasDefect = (defectFrames[group] || []).includes(fn);
+      const imgSrc    = file ? `UI/assets/Images/${file}` : "";
+      const tile      = document.createElement("div");
+      tile.className  = "af-tile";
+      tile.innerHTML  = `
+        <div class="af-tile-header">
+          <span>Frame ${fn}</span>
+          <span class="af-tile-indicator ${hasDefect ? "defect" : "ok"}"></span>
+        </div>
+        ${imgSrc
+          ? `<img class="af-tile-img" src="${imgSrc}" alt="${key}" />`
+          : `<div class="af-tile-img" style="display:flex;align-items:center;justify-content:center;color:#3a5a70;font-size:0.72rem;">No Image</div>`
+        }`;
+      if (imgSrc) tile.addEventListener("click", () => openLightbox(imgSrc, `${group.toUpperCase()} — Frame ${fn}`));
+      return tile;
+    }
+
+    function renderAllFrames() {
+      const grid = document.getElementById("allframesGrid");
+      grid.innerHTML = "";
+
+      // Sequence: BK, BT, FT, LD+TL (combined column), TP
+      const colDefs = [
+        { groups: ["back"] },
+        { groups: ["bottom"] },
+        { groups: ["front"] },
+        { groups: ["lead", "trail"] },   // share one column
+        { groups: ["top"] },
+      ];
+
+      colDefs.forEach(({ groups }) => {
+        const col = document.createElement("div");
+        col.className = "af-cam-col";
+
+        if (groups.length === 1) {
+          // Standard single-camera column
+          const group = groups[0];
+          const lbl = document.createElement("div");
+          lbl.className = "af-col-label";
+          lbl.textContent = group.toUpperCase();
+          col.appendChild(lbl);
+
+          const framesWrap = document.createElement("div");
+          framesWrap.className = "af-col-frames";
+          frames[group].forEach(fn => framesWrap.appendChild(makeTile(group, fn)));
+          col.appendChild(framesWrap);
+
+        } else {
+          // Combined column — each camera gets its own sub-section
+          groups.forEach(group => {
+            const sub = document.createElement("div");
+            sub.className = "af-sub-section";
+
+            const lbl = document.createElement("div");
+            lbl.className = "af-col-label";
+            lbl.textContent = group.toUpperCase();
+            sub.appendChild(lbl);
+
+            const framesWrap = document.createElement("div");
+            framesWrap.className = "af-col-frames";
+            frames[group].forEach(fn => framesWrap.appendChild(makeTile(group, fn)));
+            sub.appendChild(framesWrap);
+
+            col.appendChild(sub);
+          });
+        }
+
+        grid.appendChild(col);
+      });
+
+      // Sync panel info from settings
+      const recipe = localStorage.getItem("saputo_recipe") || "1";
+      const path   = localStorage.getItem("saputo_savepath") || "D:\\ImageLogs\\";
+      const afRecipe = document.getElementById("afRecipeDisplay");
+      const afPath   = document.getElementById("afImagePath");
+      if (afRecipe) afRecipe.textContent = "Recipe " + recipe;
+      if (afPath)   afPath.textContent   = path;
+    }
+
+    // Sync AF heartbeat counter
+    setInterval(() => {
+      const el = document.getElementById("afHeartbeatCount");
+      if (el) el.textContent = document.getElementById("heartbeatCount").textContent;
+    }, 1000);
+
+    // AF toggle wiring (mirrors home panel behaviour, display only)
+    document.getElementById("afBlockModeToggle").addEventListener("click", function() {
+      this.classList.toggle("active");
+      const on = this.classList.contains("active");
+      this.setAttribute("aria-checked", on);
+      document.getElementById("afBlockModeVal").textContent = on ? "Single Block" : "All Blocks";
+    });
+    document.getElementById("afDisplayModeToggle").addEventListener("click", function() {
+      this.classList.toggle("active");
+      const on = this.classList.contains("active");
+      this.setAttribute("aria-checked", on);
+      document.getElementById("afDisplayModeVal").textContent = on ? "Live" : "Replay";
+    });
+
     function setActiveView(viewName) {
-      homeView.classList.toggle("active",     viewName === "home");
-      historyView.classList.toggle("active",  viewName === "history");
-      settingsView.classList.toggle("active", viewName === "settings");
-      blocksView.classList.toggle("active",   viewName === "blocks");
-      diagView.classList.toggle("active",     viewName === "diagnostics");
+      homeView.classList.toggle("active",       viewName === "home");
+      historyView.classList.toggle("active",    viewName === "history");
+      settingsView.classList.toggle("active",   viewName === "settings");
+      blocksView.classList.toggle("active",     viewName === "blocks");
+      diagView.classList.toggle("active",       viewName === "diagnostics");
+      allframesView.classList.toggle("active",  viewName === "allframes");
 
       navViewButtons.forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.view === viewName);
       });
 
-      if (viewName === "blocks")       renderBlocks();
-      if (viewName === "diagnostics")  renderDiagnostics();
+      if (viewName === "blocks")      renderBlocks();
+      if (viewName === "diagnostics") renderDiagnostics();
+      if (viewName === "allframes")   renderAllFrames();
     }
 
     navViewButtons.forEach((btn) => {
@@ -2116,7 +2590,8 @@
     document.getElementById("historyBackBtn").addEventListener("click", () => setActiveView("home"));
     document.getElementById("settingsBackBtn").addEventListener("click", () => setActiveView("home"));
     document.getElementById("blocksBackBtn").addEventListener("click",  () => setActiveView("home"));
-    document.getElementById("diagBackBtn").addEventListener("click",    () => setActiveView("home"));
+    document.getElementById("diagBackBtn").addEventListener("click",       () => setActiveView("home"));
+    document.getElementById("allframesBackBtn").addEventListener("click", () => setActiveView("home"));
 
     document.getElementById("diagFilterType").addEventListener("change", renderDiagnostics);
     document.getElementById("diagFilterMsg").addEventListener("input",   renderDiagnostics);
