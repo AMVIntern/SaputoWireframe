@@ -706,6 +706,120 @@
       background: #00b89c;
     }
 
+    /* ── Diagnostics Viewer ────────────────────────────── */
+    .diag-layout {
+      width: 100%;
+      min-height: calc(100vh - 92px);
+      padding: 10px 98px 14px 8px;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .diag-toolbar {
+      display: grid;
+      grid-template-columns: 58px 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .diag-title {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 2rem;
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    .diag-filter-bar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .diag-filter-bar select,
+    .diag-filter-bar input {
+      background: #0c1a2a;
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      color: var(--text);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      height: 34px;
+    }
+
+    .diag-columns {
+      display: grid;
+      grid-template-columns: 2fr 1fr 4fr;
+      gap: 8px;
+    }
+
+    .diag-columns > div {
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      min-height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.84rem;
+      letter-spacing: 0.02em;
+    }
+
+    .diag-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 4fr;
+      gap: 8px;
+      border-radius: 4px;
+      border: 1px solid #1a3a50;
+      background: #0c1a2a;
+      min-height: 42px;
+      align-items: center;
+      padding: 0 6px;
+      transition: border-color 0.15s;
+    }
+
+    .diag-row:hover { border-color: var(--accent); }
+
+    .diag-row.error   { border-left: 3px solid #f04444; }
+    .diag-row.warning { border-left: 3px solid #f5a623; }
+    .diag-row.info    { border-left: 3px solid var(--accent); }
+
+    .diag-row > div {
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .diag-row > div:last-child {
+      justify-content: flex-start;
+      text-align: left;
+    }
+
+    .diag-badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+
+    .diag-badge.error   { background: rgba(240,68,68,0.18);  color: #f04444; border: 1px solid #f04444; }
+    .diag-badge.warning { background: rgba(245,166,35,0.18); color: #f5a623; border: 1px solid #f5a623; }
+    .diag-badge.info    { background: rgba(0,209,178,0.15);  color: var(--accent); border: 1px solid var(--accent); }
+
+    .diag-table {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
     /* ── Block Summary ─────────────────────────────────── */
     .blocks-layout {
       width: 100%;
@@ -1195,8 +1309,9 @@
 
     .filter-group {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      flex-direction: row;
+      align-items: center;
+      gap: 8px;
     }
 
     .filter-label {
@@ -1204,6 +1319,8 @@
       color: var(--accent);
       letter-spacing: 0.05em;
       text-transform: uppercase;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     .filter-input,
@@ -1447,10 +1564,10 @@
 
   </main>
 
-  <section class="history-layout view" id="historyView" aria-label="Historystory">
+  <section class="history-layout view" id="historyView" aria-label="History">
     <div class="history-toolbar">
       <button class="history-back-btn" id="historyBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
-      <div class="history-title">Historystory</div>
+      <div class="history-title">History</div>
       <div class="history-date-controls">
         <button class="date-nav" type="button" aria-label="Previous date">&#8249;</button>
         <div class="date-box">2026-04-27</div>
@@ -1609,6 +1726,31 @@
     <div class="blocks-table" id="blocksTable"></div>
   </section>
 
+  <section class="diag-layout view" id="diagView" aria-label="Diagnostics Viewer">
+    <div class="diag-toolbar">
+      <button class="history-back-btn" id="diagBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
+      <div class="diag-title">Diagnostics Viewer</div>
+    </div>
+
+    <div class="diag-filter-bar">
+      <select id="diagFilterType">
+        <option value="">All Types</option>
+        <option value="Error">Error</option>
+        <option value="Warning">Warning</option>
+        <option value="Info">Info</option>
+      </select>
+      <input id="diagFilterMsg" type="text" placeholder="Search message..." />
+    </div>
+
+    <div class="diag-columns">
+      <div>Timestamp</div>
+      <div>Type</div>
+      <div>Message</div>
+    </div>
+
+    <div class="diag-table" id="diagTable"></div>
+  </section>
+
   <aside class="side-nav" aria-label="Right navigation">
     <button class="nav-btn back collapse-btn" id="navCollapseBtn" title="Collapse" type="button">&#8249;</button>
     <button class="nav-btn active" title="Home" type="button" data-view="home">
@@ -1626,6 +1768,10 @@
     <button class="nav-btn" title="Blocks" type="button" data-view="blocks">
       <span class="nav-icon" aria-hidden="true">&#9635;</span>
       <span class="nav-label">Blocks</span>
+    </button>
+    <button class="nav-btn" title="Diagnostics" type="button" data-view="diagnostics">
+      <span class="nav-icon" aria-hidden="true">&#9741;</span>
+      <span class="nav-label">Diagnostics</span>
     </button>
     <button class="nav-btn" title="Settings" type="button" data-view="settings">
       <span class="nav-icon" aria-hidden="true">&#9881;</span>
@@ -1888,18 +2034,65 @@
 
     const settingsView = document.getElementById("settingsView");
     const blocksView   = document.getElementById("blocksView");
+    const diagView     = document.getElementById("diagView");
+
+    /* ── Diagnostics data ─────────────────────────────── */
+    const diagRows = [
+      { ts: "27/04/2026 9:59:19 AM", type: "Error",   msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "27/04/2026 9:59:19 AM", type: "Error",   msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "27/04/2026 9:20:52 AM", type: "Error",   msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "27/04/2026 9:20:52 AM", type: "Error",   msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "27/04/2026 5:15:59 AM", type: "Error",   msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "27/04/2026 5:15:58 AM", type: "Error",   msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "27/04/2026 4:45:17 AM", type: "Error",   msg: "Unable to set MaterialNumber. A block is already in progress." },
+      { ts: "27/04/2026 4:45:17 AM", type: "Error",   msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "27/04/2026 4:45:17 AM", type: "Error",   msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "27/04/2026 12:06:01 AM", type: "Error",  msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "27/04/2026 12:06:01 AM", type: "Error",  msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "27/04/2026 12:06:01 AM", type: "Error",  msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "26/04/2026 11:45:32 PM", type: "Warning", msg: "PLC heartbeat signal delayed by 400 ms. Monitoring connection." },
+      { ts: "26/04/2026 11:10:05 PM", type: "Info",   msg: "Block PO-2041 inspection complete. Pass rate: 87%." },
+      { ts: "26/04/2026 10:33:17 PM", type: "Error",  msg: "Unable to set MaterialNumber. A block is already in progress." },
+      { ts: "26/04/2026 10:33:17 PM", type: "Error",  msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "26/04/2026 9:58:44 PM",  type: "Warning", msg: "Camera 2 frame acquisition delayed by 220 ms." },
+      { ts: "26/04/2026 9:12:00 PM",  type: "Info",   msg: "Recipe switched from 2 to 3 by operator." },
+      { ts: "26/04/2026 8:47:29 PM",  type: "Error",  msg: "Unable to set InspectionEnabled. A block is already in progress." },
+      { ts: "26/04/2026 8:47:29 PM",  type: "Error",  msg: "Unable to set BlockPO. A block is already in progress." },
+      { ts: "26/04/2026 7:30:00 PM",  type: "Info",   msg: "System started. Recipe 1 loaded successfully." },
+    ];
+
+    function renderDiagnostics() {
+      const typeVal = document.getElementById("diagFilterType").value;
+      const msgVal  = document.getElementById("diagFilterMsg").value.trim().toLowerCase();
+      const table   = document.getElementById("diagTable");
+
+      const filtered = diagRows.filter(r => {
+        if (typeVal && r.type !== typeVal) return false;
+        if (msgVal  && !r.msg.toLowerCase().includes(msgVal)) return false;
+        return true;
+      });
+
+      table.innerHTML = filtered.map(r => `
+        <div class="diag-row ${r.type.toLowerCase()}">
+          <div>${r.ts}</div>
+          <div><span class="diag-badge ${r.type.toLowerCase()}">${r.type}</span></div>
+          <div>${r.msg}</div>
+        </div>`).join("");
+    }
 
     function setActiveView(viewName) {
       homeView.classList.toggle("active",     viewName === "home");
       historyView.classList.toggle("active",  viewName === "history");
       settingsView.classList.toggle("active", viewName === "settings");
       blocksView.classList.toggle("active",   viewName === "blocks");
+      diagView.classList.toggle("active",     viewName === "diagnostics");
 
       navViewButtons.forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.view === viewName);
       });
 
-      if (viewName === "blocks") renderBlocks();
+      if (viewName === "blocks")       renderBlocks();
+      if (viewName === "diagnostics")  renderDiagnostics();
     }
 
     navViewButtons.forEach((btn) => {
@@ -1909,6 +2102,10 @@
     document.getElementById("historyBackBtn").addEventListener("click", () => setActiveView("home"));
     document.getElementById("settingsBackBtn").addEventListener("click", () => setActiveView("home"));
     document.getElementById("blocksBackBtn").addEventListener("click",  () => setActiveView("home"));
+    document.getElementById("diagBackBtn").addEventListener("click",    () => setActiveView("home"));
+
+    document.getElementById("diagFilterType").addEventListener("change", renderDiagnostics);
+    document.getElementById("diagFilterMsg").addEventListener("input",   renderDiagnostics);
 
     document.getElementById("homePOTile").addEventListener("click", () => setActiveView("blocks"));
 
