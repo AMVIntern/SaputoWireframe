@@ -1999,7 +1999,7 @@
   <section class="allframes-layout view" id="allframesView" aria-label="All Frames">
     <div class="allframes-toolbar">
       <button class="history-back-btn" id="allframesBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
-      <div class="allframes-title">All Frames View</div>
+      <div class="allframes-title">Bird Eye View</div>
     </div>
 
     <!-- compact status strip -->
@@ -2069,9 +2069,17 @@
       <span class="nav-icon" aria-hidden="true">&#8962;</span>
       <span class="nav-label">Home</span>
     </button>
-    <button class="nav-btn" title="All Frames" type="button" data-view="allframes">
-      <span class="nav-icon" aria-hidden="true">&#9638;</span>
-      <span class="nav-label">All Frames</span>
+    <button class="nav-btn" title="Bird Eye" type="button" data-view="allframes">
+      <span class="nav-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="12" rx="10" ry="4"/>
+          <line x1="2" y1="12" x2="22" y2="12"/>
+          <path d="M12 2a15 15 0 0 1 0 20"/>
+          <path d="M12 2a15 15 0 0 0 0 20"/>
+          <circle cx="12" cy="12" r="2" fill="currentColor"/>
+        </svg>
+      </span>
+      <span class="nav-label">Bird Eye</span>
     </button>
     <button class="nav-btn" title="Image Logs" type="button">
       <span class="nav-icon" aria-hidden="true">
