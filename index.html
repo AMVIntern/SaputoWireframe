@@ -768,105 +768,124 @@
       min-height: 0;
     }
 
-    /* column-based all-frames grid */
+    /* Bird Eye unfolded-box layout */
     .allframes-grid {
       flex: 1;
       min-width: 0;
-      display: flex;
-      flex-direction: row;
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 0.7fr 2.4fr 0.7fr;
+      grid-template-rows: 1.3fr 1.3fr 1.3fr 0.9fr;
+      grid-template-areas:
+        ".    back   ."
+        "lead top    trail"
+        ".    front  ."
+        "bot  bot    bot";
       gap: 6px;
       overflow: hidden;
     }
 
-    /* one column per camera (LD+TL share one column) */
-    .af-cam-col {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-width: 0;
-      min-height: 0;
-    }
+    .be-top    { grid-area: top; }
+    .be-bottom { grid-area: bot; }
+    .be-front  { grid-area: front; }
+    .be-back   { grid-area: back; }
+    .be-lead   { grid-area: lead; }
+    .be-trail  { grid-area: trail; }
 
-    .af-col-label {
-      flex-shrink: 0;
-      height: 26px;
+    .be-face {
       border: 1px solid var(--accent);
-      border-radius: 5px;
-      background: #0a1520;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-
-    .af-col-frames {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      min-height: 0;
-    }
-
-    /* sub-section used inside the LD+TL combined column */
-    .af-sub-section {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .af-tile {
-      flex: 1;
-      min-height: 0;
-      border: 1px solid #1a3a50;
-      border-radius: 5px;
+      border-radius: 6px;
       background: #0c1a2a;
+      position: relative;
+      overflow: hidden;
+      min-width: 0;
+      min-height: 0;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      transition: border-color 0.15s;
-      min-width: 0;
-      cursor: pointer;
     }
 
-    .af-tile:hover { border-color: var(--accent); }
+    /* dominant top face */
+    .be-top {
+      box-shadow: 0 0 24px rgba(0,209,178,0.18) inset;
+      border-width: 2px;
+    }
 
-    .af-tile-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 3px 6px;
-      background: #0a1520;
-      font-size: 0.65rem;
+    .be-face-label {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      z-index: 2;
+      font-size: 0.66rem;
       font-weight: 700;
-      color: #a0c8d8;
-      flex-shrink: 0;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      background: rgba(11, 24, 37, 0.88);
+      padding: 3px 8px;
+      border-radius: 3px;
+      border: 1px solid rgba(0,209,178,0.4);
+      text-transform: uppercase;
+      pointer-events: none;
     }
 
-    .af-tile-indicator {
-      width: 7px;
-      height: 7px;
+    .be-face-status {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 2;
+      width: 10px;
+      height: 10px;
       border-radius: 50%;
-      flex-shrink: 0;
+      pointer-events: none;
+      box-shadow: 0 0 6px rgba(0,0,0,0.6);
+    }
+    .be-face-status.ok     { background: #16d46b; }
+    .be-face-status.defect { background: #f04444; }
+
+    .be-face-frames {
+      flex: 1;
+      display: flex;
+      min-width: 0;
+      min-height: 0;
     }
 
-    .af-tile-indicator.ok     { background: #16d46b; }
-    .af-tile-indicator.defect { background: #f04444; }
-
-    .af-tile-img {
+    .be-frame {
       flex: 1;
-      width: 100%;
-      object-fit: contain;
-      background: #060f18;
-      display: block;
+      min-width: 0;
       min-height: 0;
+      display: flex;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .be-frame:not(:last-child) {
+      border-right: 1px dashed rgba(0,209,178,0.25);
+    }
+
+    .be-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.2s, filter 0.2s;
+    }
+
+    .be-frame:hover img {
+      transform: scale(1.04);
+      filter: brightness(1.1);
+    }
+
+    .be-frame-tag {
+      position: absolute;
+      bottom: 3px;
+      right: 4px;
+      font-size: 0.6rem;
+      color: #ffffff;
+      background: rgba(0,0,0,0.55);
+      padding: 1px 5px;
+      border-radius: 3px;
+      letter-spacing: 0.04em;
+      pointer-events: none;
     }
 
     .af-status-strip {
@@ -1997,11 +2016,6 @@
   </div>
 
   <section class="allframes-layout view" id="allframesView" aria-label="All Frames">
-    <div class="allframes-toolbar">
-      <button class="history-back-btn" id="allframesBackBtn" type="button" aria-label="Back to Home">&#8592;</button>
-      <div class="allframes-title">Bird Eye View</div>
-    </div>
-
     <!-- compact status strip -->
     <div class="af-status-strip">
       <div class="af-strip-item">
@@ -2477,79 +2491,63 @@
       if (e.target === afLightbox) afLightbox.classList.add("hidden");
     });
 
-    function makeTile(group, fn) {
-      const code      = groupToCode[group];
-      const key       = `${code}${fn}`;
-      const file      = imageMap[key];
-      const hasDefect = (defectFrames[group] || []).includes(fn);
-      const imgSrc    = file ? `UI/assets/Images/${file}` : "";
-      const tile      = document.createElement("div");
-      tile.className  = "af-tile";
-      tile.innerHTML  = `
-        <div class="af-tile-header">
-          <span>Frame ${fn}</span>
-          <span class="af-tile-indicator ${hasDefect ? "defect" : "ok"}"></span>
-        </div>
-        ${imgSrc
-          ? `<img class="af-tile-img" src="${imgSrc}" alt="${key}" />`
-          : `<div class="af-tile-img" style="display:flex;align-items:center;justify-content:center;color:#3a5a70;font-size:0.72rem;">No Image</div>`
-        }`;
-      if (imgSrc) tile.addEventListener("click", () => openLightbox(imgSrc, `${group.toUpperCase()} — Frame ${fn}`));
-      return tile;
+    function buildFace(group, faceClass) {
+      const code = groupToCode[group];
+      const face = document.createElement("div");
+      face.className = `be-face ${faceClass}`;
+
+      const label = document.createElement("div");
+      label.className = "be-face-label";
+      label.textContent = group.toUpperCase();
+      face.appendChild(label);
+
+      const faceDefects = defectFrames[group] || [];
+      const status = document.createElement("div");
+      status.className = `be-face-status ${faceDefects.length ? "defect" : "ok"}`;
+      face.appendChild(status);
+
+      const framesWrap = document.createElement("div");
+      framesWrap.className = "be-face-frames";
+
+      frames[group].forEach(fn => {
+        const key    = `${code}${fn}`;
+        const file   = imageMap[key];
+        const imgSrc = file ? `UI/assets/Images/${file}` : "";
+
+        const fr = document.createElement("div");
+        fr.className = "be-frame";
+        fr.innerHTML = imgSrc
+          ? `<img src="${imgSrc}" alt="${key}" />
+             <span class="be-frame-tag">${fn}</span>`
+          : `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:#3a5a70;font-size:0.72rem;background:#060f18;">No Image</div>`;
+
+        if (imgSrc) {
+          fr.addEventListener("click", () =>
+            openLightbox(imgSrc, `${group.toUpperCase()} — Frame ${fn}`)
+          );
+        }
+        framesWrap.appendChild(fr);
+      });
+
+      face.appendChild(framesWrap);
+      return face;
     }
 
     function renderAllFrames() {
       const grid = document.getElementById("allframesGrid");
       grid.innerHTML = "";
 
-      // Sequence: BK, BT, FT, LD+TL (combined column), TP
-      const colDefs = [
-        { groups: ["back"] },
-        { groups: ["bottom"] },
-        { groups: ["front"] },
-        { groups: ["lead", "trail"] },   // share one column
-        { groups: ["top"] },
-      ];
-
-      colDefs.forEach(({ groups }) => {
-        const col = document.createElement("div");
-        col.className = "af-cam-col";
-
-        if (groups.length === 1) {
-          // Standard single-camera column
-          const group = groups[0];
-          const lbl = document.createElement("div");
-          lbl.className = "af-col-label";
-          lbl.textContent = group.toUpperCase();
-          col.appendChild(lbl);
-
-          const framesWrap = document.createElement("div");
-          framesWrap.className = "af-col-frames";
-          frames[group].forEach(fn => framesWrap.appendChild(makeTile(group, fn)));
-          col.appendChild(framesWrap);
-
-        } else {
-          // Combined column — each camera gets its own sub-section
-          groups.forEach(group => {
-            const sub = document.createElement("div");
-            sub.className = "af-sub-section";
-
-            const lbl = document.createElement("div");
-            lbl.className = "af-col-label";
-            lbl.textContent = group.toUpperCase();
-            sub.appendChild(lbl);
-
-            const framesWrap = document.createElement("div");
-            framesWrap.className = "af-col-frames";
-            frames[group].forEach(fn => framesWrap.appendChild(makeTile(group, fn)));
-            sub.appendChild(framesWrap);
-
-            col.appendChild(sub);
-          });
-        }
-
-        grid.appendChild(col);
-      });
+      // Unfolded-box layout (bird's eye view of the block):
+      //   - TOP centered (dominant)
+      //   - BACK above TOP, FRONT below TOP (long sides wrapping over the edges)
+      //   - LEAD left, TRAIL right (short ends)
+      //   - BOTTOM laid out at the bottom (the hidden face)
+      grid.appendChild(buildFace("back",   "be-back"));
+      grid.appendChild(buildFace("lead",   "be-lead"));
+      grid.appendChild(buildFace("top",    "be-top"));
+      grid.appendChild(buildFace("trail",  "be-trail"));
+      grid.appendChild(buildFace("front",  "be-front"));
+      grid.appendChild(buildFace("bottom", "be-bottom"));
 
       // Sync panel info from settings
       const recipe = localStorage.getItem("saputo_recipe") || "1";
@@ -2605,7 +2603,6 @@
     document.getElementById("settingsBackBtn").addEventListener("click", () => setActiveView("home"));
     document.getElementById("blocksBackBtn").addEventListener("click",  () => setActiveView("home"));
     document.getElementById("diagBackBtn").addEventListener("click",       () => setActiveView("home"));
-    document.getElementById("allframesBackBtn").addEventListener("click", () => setActiveView("home"));
 
     document.getElementById("diagFilterType").addEventListener("change", renderDiagnostics);
     document.getElementById("diagFilterMsg").addEventListener("input",   renderDiagnostics);
