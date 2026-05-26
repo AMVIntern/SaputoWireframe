@@ -839,7 +839,7 @@
       box-shadow: 0 0 6px rgba(0,0,0,0.6);
     }
     .be-face-status.ok     { background: #16d46b; }
-    .be-face-status.defect { background: #f04444; }
+    .be-face-status.defect { background: #16d46b; }
 
     .be-face-frames {
       flex: 1;
@@ -857,18 +857,32 @@
       cursor: pointer;
       position: relative;
     }
+.be-frame {
+    position: relative;
+}
 
+.be-frame-dot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #16d46b;
+    z-index: 5;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
     .be-frame:not(:last-child) {
       border-right: 1px dashed rgba(0,209,178,0.25);
     }
 
     .be-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.2s, filter 0.2s;
-    }
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.2s, filter 0.2s;
+  }
 
     .be-frame:hover img {
       transform: scale(1.04);
@@ -2517,8 +2531,11 @@
         const fr = document.createElement("div");
         fr.className = "be-frame";
         fr.innerHTML = imgSrc
-          ? `<img src="${imgSrc}" alt="${key}" />
-             <span class="be-frame-tag">${fn}</span>`
+  ? `
+      <div class="be-frame-dot"></div>
+      <img src="${imgSrc}" alt="${key}" />
+      <span class="be-frame-tag">${fn}</span>
+    `
           : `<div style="flex:1;display:flex;align-items:center;justify-content:center;color:#3a5a70;font-size:0.72rem;background:#060f18;">No Image</div>`;
 
         if (imgSrc) {
